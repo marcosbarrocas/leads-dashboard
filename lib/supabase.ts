@@ -1,7 +1,27 @@
 import { createBrowserClient } from "@supabase/ssr"
 
-export const createClient = () =>
-  createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+/**
+ * Cria o cliente Supabase para o **browser** (via `@supabase/ssr` / `createBrowserClient`).
+ *
+ * Usa `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` injetadas no build.
+ * Se alguma estiver ausente ou vazia, lança erro explícito (comum em deploy sem env na Vercel).
+ *
+ * **Argumentos:** nenhum.
+ *
+ * **Retorno:** instância retornada por `createBrowserClient`, com cookies compatíveis com o `proxy`/SSR.
+ *
+ * @throws {Error} Quando URL ou anon key não estão definidas no ambiente.
+ */
+export function createClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
+  if (!url || !key) {
+    throw new Error(
+      "NEXT_PUBLIC_SUPABASE_URL ou NEXT_PUBLIC_SUPABASE_ANON_KEY ausentes. Na Vercel: Settings → Environment Variables (Production) e redeploy.",
+    )
+  }
+  return createBrowserClient(url, key)
+}
 
 export interface AuthUser {
   id: string

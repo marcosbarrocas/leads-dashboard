@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import "./globals.css"
+import { Toaster } from "@/components/toaster"
 
 const geistSans = GeistSans.variable
 const geistMono = GeistMono.variable
@@ -20,7 +21,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className={`${geistSans} ${geistMono} dark antialiased`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   )
 }

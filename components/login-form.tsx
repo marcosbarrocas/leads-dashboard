@@ -37,12 +37,23 @@ export function LoginForm() {
           title: "Login realizado com sucesso!",
           description: "Bem-vindo ao Dashboard WhatsApp",
         })
+        router.refresh()
         router.push("/dashboard")
+      } else {
+        toast({
+          title: "Não foi possível entrar",
+          description:
+            "Sessão não foi criada. Confira as variáveis na Vercel, o Site URL no Supabase (Auth) e tente de novo.",
+          variant: "destructive",
+        })
       }
     } catch (error) {
+      console.error("[LoginForm]", error)
+      const msg =
+        error instanceof Error ? error.message : "Ocorreu um erro inesperado. Tente novamente."
       toast({
         title: "Erro no login",
-        description: "Ocorreu um erro inesperado. Tente novamente.",
+        description: msg,
         variant: "destructive",
       })
     } finally {
